@@ -1,0 +1,26 @@
+datasource db {
+  url      = env("DB_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @map("created_at") @default(now())
+  email     String   @unique
+  name      String?
+  posts post[]
+}
+
+
+model post {
+  id       Int  @id @default(autoincrement())
+  author   user @relation(fields: [authorId], references: [id])
+  authorId Int @map("author_id") // relation scalar field  (used in the `@relation` attribute above)
+  title String
+  content String  @db.Text()
+  published Boolean
+}

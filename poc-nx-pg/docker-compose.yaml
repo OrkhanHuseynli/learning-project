@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=content_db
+    expose:
+      - 5432
+
+  pg-admin-ui:
+    image: dpage/pgadmin4:8
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "root@pg.admin"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_DISABLE_POSTFIX: "True"
+      PGADMIN_SERVER_JSON_FILE: "/store/servers.json"
+    ports:
+      - "8888:80"
+    # volumes:
+    #   - ./tmp/pgadmin/servers.json:/store/servers.json

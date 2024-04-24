@@ -1,0 +1,90 @@
+version: '3'
+volumes:
+  mysql-data:
+    driver: local
+  mysql-log:
+    driver: local
+  mysql-conf:
+    driver: local
+
+
+
+services:
+  db:
+    image: postgres:13-alpine
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test_db
+    volumes:
+      - ./.postgres-data:/var/lib/postgresql/data
+      - ./dev-data:/var/lib/postgresql/dev-data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  migrations:
+#    build: ./db-migrations
+#    image: mckinsey-shape-re-docker.jfrog.io/shape_rec/ed_ca_migrations:dev
+#    container_name: ed_ca_migrations
+#    environment:
+#      #checkov:skip=CKV_SECRET_4:Test credentials
+#      GOOSE_DBSTRING: "postgresql://postgres:postgres@db:5432/ed-ca?sslmode=disable"
+#      DB_DEV_USER_PASSWORD: "dev_user_pwd"
+#      DB_APP_USER_PASSWORD: "app_user_pwd"
+#    depends_on:
+#      - db
+
+#    volumes:
+#      - ./.postgres-data:/var/lib/postgresql/data:cached
+#    healthcheck:
+#      test: ['CMD-SHELL', '-mysqladmin -u admin -p status']
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#  migrations:
+#    build: ./db-migrations
+#    environment:
+#      GOOSE_DBSTRING: 'postgresql://postgres:postgres@db:5432/postgres?sslmode=disable'
+#      DB_APP_USER_NAME: 'app_user'
+#      DB_APP_USER_PASSWORD: 'app_user'
+#      DB_DEV_USER_PASSWORD: "dev_user"
+#    depends_on:
+#      - db
+#
+#  dash-app:
+#    build:
+#      context: ./dash-app
+#      args:
+#        - USERNAME_JFROG
+#        - PASSWORD_JFROG
+#    environment:
+#      DB_CONNECTION: postgresql://postgres:postgres@db:5432/postgres?sslmode=disable
+#      ATHENA_WORKGROUP: dev-shape-rec-pf-tad
+#      ATHENA_DB: dev-shape-rec-pf-tad
+#      MACRO_QUERY: 'SELECT * FROM "dev-shape-rec-pf-tad"."macroeconomic" WHERE country IN'
+#      AWS_ACCESS_KEY_ID:
+#      AWS_SECRET_ACCESS_KEY:
+#      AWS_SESSION_TOKEN:
+#      AWS_REGION:
+#      AWS_DEFAULT_REGION:
+#
+#    depends_on:
+#      - db
+#
+#  proxy:
+#    image: mckinsey-shape-re-docker.jfrog.io/nginx:latest
+#    volumes:
+#      - ./nginx.conf.template:/etc/nginx/templates/proxy.conf.template
+#    ports:
+#      - '80:80'
+#    restart: on-failure
+#    environment:
+#      JWT:
+#    depends_on:
+#      - dash-app
