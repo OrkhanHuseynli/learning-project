@@ -1,6 +1,6 @@
 "use client";
 
-import { PostService } from "../../services";
+import { PostService } from "../../services/ui";
 import { PostListItem } from "./PostListItem";
 import { useEffect, useState } from "react";
 

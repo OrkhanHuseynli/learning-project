@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { RichText } from "../../../components/ui/rich-text/RichText";
 import { Button } from "../../../components/ui/plate-ui/button";
 import { Value } from "@udecode/plate-common";
-import { PostService } from "../../../services";
+import { PostService } from "../../../services/ui";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const postService = new PostService();

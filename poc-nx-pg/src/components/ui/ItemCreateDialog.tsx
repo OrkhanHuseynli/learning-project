@@ -14,8 +14,10 @@ import {
 import { Button, Input } from "./plate-ui";
 import { RichText } from "./rich-text/RichText";
 import { Value } from "@udecode/plate-common";
+import { PostService } from "../../services/ui";
+import { PostCreateDto } from "../../dto";
 
-type ItemCreateDialog = {
+type ItemCreateDialogState = {
   title: string;
   content: string;
 };
@@ -28,15 +30,25 @@ const defaultValue = [
   },
 ];
 
+const defaultTitle = "Post Title";
+
 export function ItemCreateDialog() {
-  const [state, setState] = useState<ItemCreateDialog>({
-    title: "",
-    content: "",
+  const postService = new PostService();
+  const [state, setState] = useState<ItemCreateDialogState>({
+    title: defaultTitle,
+    content: JSON.stringify(defaultValue),
   });
-  const [editorContent, setEditorContent] = useState<Value>(defaultValue);
+  const setEditorContent = (value: Value) => {
+    setState({ ...state, content: JSON.stringify(value) });
+  };
+  // const [editorContent, setEditorContent] = useState<Value>(defaultValue);
 
   const saveBtnAction = () => {
-    console.log(editorContent);
+    const createDto = new PostCreateDto();
+    createDto.title = state.title;
+    createDto.content = state.content;
+    createDto.published = true;
+    postService.createPost(createDto);
   };
 
   const validateState = () => {};
@@ -58,8 +70,11 @@ export function ItemCreateDialog() {
             </label>
             <Input
               id="title"
-              defaultValue="A New Post Title"
+              defaultValue={defaultTitle}
               className="col-span-4"
+              onChange={(e) => {
+                setState({ ...state, title: e.target.value });
+              }}
             />
           </div>
           <div className="grid grid-cols-5 items-center gap-1">
@@ -69,7 +84,7 @@ export function ItemCreateDialog() {
             <div className="col-span-4">
               <RichText
                 setEditorContent={setEditorContent}
-                initialValue={editorContent}
+                initialValue={defaultValue}
               />
             </div>
           </div>
