@@ -1,14 +1,13 @@
 import { describe } from "node:test";
-import { AppContext } from "./context";
+import { AppServerContext } from "./serverContext";
 
-describe(`Test ${AppContext.name}`, ()=>{
+describe(`Test ${AppServerContext.name}`, () => {
+  it("Same instance should be returned", () => {
+    expect.assertions(1);
 
-    it('Same instance should be returned', ()=>{
-        expect.assertions(1);
+    const s1 = AppServerContext.getInstance();
+    const s2 = AppServerContext.getInstance();
 
-        const s1 = AppContext.getInstance();
-        const s2 = AppContext.getInstance();
-
-        expect(s1).toEqual(s2)
-    })
-})
+    expect(s1).toEqual(s2);
+  });
+});

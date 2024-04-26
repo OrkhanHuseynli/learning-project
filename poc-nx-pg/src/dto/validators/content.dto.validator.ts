@@ -1,13 +1,13 @@
-import { ContentCreateDto } from "../content.create.dto";
-import { ContentDto } from "../content.dto";
-import { ContentUpdateDto } from "../content.update.dto";
+import { PostCreateDto } from "../post.create.dto";
+import { PostDto } from "../post.dto";
+import { PostUpdateDto } from "../post.update.dto";
 
 export function validateContentDto(contentDto: Object): boolean {
   let keys = Object.keys(contentDto);
-  const targetKeys = Object.keys(new ContentDto());
+  const targetKeys = Object.keys(new PostDto());
   for (let key of targetKeys) {
     if (!keys.includes(key)) {
-      console.log(`Validation of ${ContentDto.name} failed`);
+      console.log(`Validation of ${PostDto.name} failed`);
       return false;
     }
   }
@@ -16,10 +16,10 @@ export function validateContentDto(contentDto: Object): boolean {
 
 export function validateContentUpdateDto(contentDto: Object): boolean {
   let keys = Object.keys(contentDto);
-  const targetKeys = Object.keys(new ContentUpdateDto());
+  const targetKeys = Object.keys(new PostUpdateDto());
   for (let key of targetKeys) {
     if (!keys.includes(key)) {
-      console.log(`Validation of ${ContentUpdateDto.name} failed`);
+      console.log(`Validation of ${PostUpdateDto.name} failed`);
       return false;
     }
   }
@@ -28,10 +28,10 @@ export function validateContentUpdateDto(contentDto: Object): boolean {
 
 export function validateContentCreateDto(contentDto: Object): boolean {
   let keys = Object.keys(contentDto);
-  const targetKeys = Object.keys(new ContentCreateDto());
+  const targetKeys = Object.keys(new PostCreateDto());
   for (let key of targetKeys) {
     if (!keys.includes(key)) {
-      console.log(`Validation of ${ContentCreateDto.name} failed`);
+      console.log(`Validation of ${PostCreateDto.name} failed`);
       return false;
     }
   }

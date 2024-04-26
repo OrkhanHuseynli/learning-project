@@ -363,41 +363,43 @@ type RichTextProps = {
 export function RichText({ setEditorContent, initialValue }: RichTextProps) {
   const [value, setValue] = useState<Value>(initialValue);
   if (initialValue) {
-    const validatedValue = validateEditorContent(initialValue)
+    const validatedValue = validateEditorContent(initialValue);
     return (
-      <TooltipProvider>
-        <DndProvider backend={HTML5Backend}>
-          <CommentsProvider users={{}} myUserId="1">
-            <Plate
-              plugins={plugins}
-              value={validatedValue}
-              onChange={(newValue) => {
-                setValue(newValue);
-                setEditorContent(newValue);
-              }}
-            >
-              <FixedToolbar>
-                <FixedToolbarButtons />
-              </FixedToolbar>
+      <div  style={{width: "100%"}}>
+        <TooltipProvider>
+          <DndProvider backend={HTML5Backend}>
+            <CommentsProvider users={{}} myUserId="1">
+              <Plate
+                plugins={plugins}
+                value={validatedValue}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                  setEditorContent(newValue);
+                }}
+              >
+                <FixedToolbar>
+                  <FixedToolbarButtons />
+                </FixedToolbar>
 
-              <Editor
-                style={{ marginTop: "20px" }}
-                className={cn(
-                  "px-8",
-                  "min-h-[600px] pb-[20vh] pt-4 md:px-[96px]",
-                  "pb-8 pt-2"
-                )}
-              />
+                <Editor
+                  style={{ marginTop: "20px" }}
+                  className={cn(
+                    "px-8",
+                    "min-h-[300px] pb-[20vh] pt-4 md:px-[96px]",
+                    "pb-8 pt-2"
+                  )}
+                />
 
-              <FloatingToolbar>
-                <FloatingToolbarButtons />
-              </FloatingToolbar>
-              <MentionCombobox items={[]} />
-              <CommentsPopover />
-            </Plate>
-          </CommentsProvider>
-        </DndProvider>
-      </TooltipProvider>
+                <FloatingToolbar>
+                  <FloatingToolbarButtons />
+                </FloatingToolbar>
+                <MentionCombobox items={[]} />
+                <CommentsPopover />
+              </Plate>
+            </CommentsProvider>
+          </DndProvider>
+        </TooltipProvider>
+      </div>
     );
   }
   return <div className="container m-10">Loading Text Editor...</div>;

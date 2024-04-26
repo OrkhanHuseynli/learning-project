@@ -3,27 +3,17 @@ import { useEffect, useState } from "react";
 import { RichText } from "../../../components/ui/rich-text/RichText";
 import { Button } from "../../../components/ui/plate-ui/button";
 import { Value } from "@udecode/plate-common";
-
-type Post = {
-  title: string;
-};
-
-const defaultValue = [
-  {
-    id: "1",
-    type: "p",
-    children: [{ text: "Hello, World!" }],
-  },
-];
+import { PostService } from "../../../services";
 
 export default function Page({ params }: { params: { slug: string } }) {
+  const postService = new PostService();
   const [data, setData] = useState({
     post: { title: "", content: "", published: true },
   });
   const [editorContent, setEditorContent] = useState<Value>(null);
 
   useEffect(() => {
-    fetch(`/api/content/${params.slug}`)
+    fetch(`/api/post/${params.slug}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -34,17 +24,10 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, []);
 
   const saveContent = () => {
-    // console.log(editorContent);
-    fetch(`/api/content/${params.slug}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: data.post.title,
-        published: data.post.published,
-        content: JSON.stringify(editorContent),
-      }),
+    postService.updatePost(params.slug, {
+      title: data.post.title,
+      published: data.post.published,
+      content: JSON.stringify(editorContent),
     });
   };
 

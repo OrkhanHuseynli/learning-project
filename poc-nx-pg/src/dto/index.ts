@@ -1,3 +1,3 @@
-export * from "./content.dto";
-export * from "./content.update.dto";
-export * from "./content.create.dto";
+export * from "./post.dto";
+export * from "./post.update.dto";
+export * from "./post.create.dto";

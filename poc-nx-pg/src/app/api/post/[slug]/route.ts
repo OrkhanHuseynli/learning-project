@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AppContext } from "../../../../context";
-import { ContentDto } from "../../../../dto";
+import { AppServerContext } from "../../../../serverContext";
+import { PostDto } from "../../../../dto";
 import {
   validateContentDto,
   validateContentUpdateDto,
 } from "../../../../dto/validators";
 
-const prisma = AppContext.getPrisma();
+const prisma = AppServerContext.getPrisma();
 
 export async function GET(
   req: NextRequest,
@@ -54,7 +54,7 @@ export async function POST(req: Request, res: Response) {
   }
   return NextResponse.json(
     {
-      message: `Request body doesn't satisfy the expected contract for ${ContentDto.name}`,
+      message: `Request body doesn't satisfy the expected contract for ${PostDto.name}`,
     },
     {
       status: 500,
@@ -93,7 +93,7 @@ export async function PUT(
   }
   return NextResponse.json(
     {
-      message: `Request body doesn't satisfy the expected contract for ${ContentDto.name}`,
+      message: `Request body doesn't satisfy the expected contract for ${PostDto.name}`,
     },
     {
       status: 500,

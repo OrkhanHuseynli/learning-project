@@ -1,17 +1,19 @@
 "use client";
 
+import { PostService } from "../../services";
 import { PostListItem } from "./PostListItem";
 import { useEffect, useState } from "react";
 
 export function PostList() {
+  const postService = new PostService();
   const [data, setData] = useState({
     posts: [{ id: 1, title: "", content: "" }],
   });
   const skip = 0;
   const take = 100;
   useEffect(() => {
-    fetch(`/api/content?skip=${skip}&take=${take}`)
-      .then((response) => response.json())
+    postService
+      .getPosts(skip, take)
       .then((data) => {
         console.log(data);
         setData(data);

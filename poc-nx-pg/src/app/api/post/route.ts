@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AppContext } from "../../../context";
-import { ContentDto } from "../../../dto";
+import { AppServerContext } from "../../../serverContext";
+import { PostDto } from "../../../dto";
 import {
   validateContentCreateDto,
   validateContentDto,
 } from "../../../dto/validators";
 
-const prisma = AppContext.getPrisma();
+const prisma = AppServerContext.getPrisma();
 
 export async function GET(req: NextRequest) {
   const skip = Number(req.nextUrl.searchParams.get("skip"));
@@ -70,7 +70,7 @@ export async function POST(req: Request, res: Response) {
       console.log(e);
       return NextResponse.json(
         {
-          message: `Failed while creating a post item with ${ContentDto.name}`,
+          message: `Failed while creating a post item with ${PostDto.name}`,
           e,
         },
         {
@@ -81,7 +81,7 @@ export async function POST(req: Request, res: Response) {
   }
   return NextResponse.json(
     {
-      message: `Request body doesn't satisfy the expected contract for ${ContentDto.name}`,
+      message: `Request body doesn't satisfy the expected contract for ${PostDto.name}`,
     },
     {
       status: 500,
@@ -97,7 +97,7 @@ export async function PUT(req: Request, res: Response) {
   }
   return NextResponse.json(
     {
-      message: `Request body doesn't satisfy the expected contract for ${ContentDto.name}`,
+      message: `Request body doesn't satisfy the expected contract for ${PostDto.name}`,
     },
     {
       status: 500,

@@ -9,22 +9,22 @@ export const context: Context = {
   prisma: prisma,
 };
 
-export class AppContext implements Context {
-  private static instance: AppContext;
+export class AppServerContext implements Context {
+  private static instance: AppServerContext;
   prisma: PrismaClient;
 
   constructor() {
     this.prisma = new PrismaClient();
   }
 
-  public static getInstance(): AppContext {
+  public static getInstance(): AppServerContext {
     if (this.instance == null) {
-      this.instance = new AppContext();
+      this.instance = new AppServerContext();
     }
     return this.instance;
   }
 
   public static getPrisma(): PrismaClient {
-    return this.getInstance().prisma
+    return this.getInstance().prisma;
   }
 }
