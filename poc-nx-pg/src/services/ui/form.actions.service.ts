@@ -1,7 +1,9 @@
-import { SignupFormSchema, FormState } from "@/app/lib/definitions";
+import { SignupFormSchema, FormState } from "@/app/lib/ui/definitions";
 import { UserService } from "./../ui";
 import { RoleEnum, roles } from "src/auth/roles";
+import { ValidatorService } from "./validator.service";
 const userService = new UserService();
+const validatorService = new ValidatorService();
 
 export async function signUpAction(state: FormState, formData): Promise<any> {
   console.log("sign up action");
@@ -16,12 +18,17 @@ export async function signUpAction(state: FormState, formData): Promise<any> {
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
-    console.log(" validatedFields not successful end");
+    console.log(" Validation: fields are not successful");
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   } else {
-    console.log(" hitting end");
+    const emailExists = await validatorService.emailExists(userCreateDto.email);
+    if (emailExists) {
+      return {
+        error: "User with this email already exists!",
+      };
+    }
     const result = await userService.createUser({
       ...userCreateDto,
       roles: [RoleEnum.viewer],
@@ -34,7 +41,7 @@ export async function signUpAction(state: FormState, formData): Promise<any> {
     } else {
       console.log("sign up was not successful");
       return {
-        error: "Failed to sign up: ",
+        error: "Failed to sign up...",
       };
     }
   }

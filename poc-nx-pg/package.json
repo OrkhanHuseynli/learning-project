@@ -100,6 +100,7 @@
     "slate-react": "^0.102.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "validator": "^13.12.0",
     "zod": "^3.23.4"
   }
 }

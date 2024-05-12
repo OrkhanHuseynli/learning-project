@@ -4,7 +4,6 @@ const endpoint = "/api/user";
 
 export class UserService {
   async createUser(userCreateDto: UserCreateDto): Promise<boolean> {
-    console.log("createUser");
     const result = await fetch(endpoint, {
       method: "POST",
       headers: {

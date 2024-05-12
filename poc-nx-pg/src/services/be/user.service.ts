@@ -31,4 +31,13 @@ export class UserService {
     const createUser = await prisma.user.create({ data: user });
     return createUser;
   }
+
+  async userExists(email: string): Promise<boolean> {
+    const createUser = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return createUser ? true : false;
+  }
 }

@@ -2,13 +2,12 @@
 import { signUpAction } from "@/services/ui";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "./plate-ui";
+import { WarningBadge } from "./MessageBadges";
 
 export function SignUpForm() {
   // const [message, formAction] = useActionState(signUpAction, "");
   const [state, action] = useFormState(signUpAction, undefined);
 
-  const itemTitle = "nothing";
-  const itemID = "111";
   return (
     <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -130,7 +129,7 @@ export function SignUpForm() {
           </div>
           <SignupButton />
           <>{state?.message && <p>{state?.message}</p>}</>
-          <>{state?.error && <ErrorBadge message={state?.error} />}</>
+          <>{state?.error && <WarningBadge message={state?.error} />}</>
           <p className="text-sm font-light text-gray-500 dark:text-gray-400">
             Already have an account?{" "}
             <a
@@ -157,17 +156,5 @@ export function SignupButton() {
     >
       {pending ? "Submitting..." : "Sign up"}
     </button>
-  );
-}
-
-export function ErrorBadge({ message }) {
-  return (
-    <div
-      className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
-      role="alert"
-    >
-      <p className="font-bold">Error</p>
-      <p>{message}</p>
-    </div>
   );
 }
