@@ -1,7 +1,8 @@
 import { UserCreateDto } from "src/dto/user.create.dto";
-import { CurrentUserDto, UserDto } from "../dto";
+import { CurrentUserDto, UserDto } from "../../dto";
 import { AppServerContext } from "src/serverContext";
 import { Role } from "@prisma/client";
+import { AuthService } from "src/auth/auth.service";
 
 const prisma = AppServerContext.getPrisma();
 
@@ -20,8 +21,10 @@ export class UserService {
 
     const user = {
       name: userDto.name,
+      lastName: userDto.lastName,
       email: userDto.email,
       roles: userDto.roles as Role[],
+      password: AuthService.hashPassword(userDto.password),
       createdBy: currentUser.email,
       updatedBy: currentUser.email,
     };

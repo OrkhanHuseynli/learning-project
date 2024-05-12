@@ -9,3 +9,10 @@ export const roles = new Map<string, string>([
   [Role.site_editor, Role.site_editor],
   [Role.viewer, Role.viewer],
 ]);
+
+export class RoleEnum {
+  static admin: string = Role.admin;
+  static siteOwner: string = Role.site_owner;
+  static siteEditor: string = Role.site_editor;
+  static viewer: string = Role.viewer;
+}

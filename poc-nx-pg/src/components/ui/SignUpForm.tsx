@@ -1,6 +1,6 @@
 "use client";
 import { signUpAction } from "@/services/ui";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "./plate-ui";
 
 export function SignUpForm() {
@@ -37,7 +37,7 @@ export function SignUpForm() {
               htmlFor="lastName"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Your name
+              Your last name
             </label>
             <input
               type="lastName"
@@ -83,7 +83,7 @@ export function SignUpForm() {
             <div>
               <p>Password must:</p>
               <ul>
-                {state.errors.password.map((error) => (
+                {state?.errors?.password.map((error) => (
                   <li key={error}>- {error}</li>
                 ))}
               </ul>
@@ -128,12 +128,9 @@ export function SignUpForm() {
               </label>
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-          >
-            Create an account
-          </button>
+          <SignupButton />
+          <>{state?.message && <p>{state?.message}</p>}</>
+          <>{state?.error && <ErrorBadge message={state?.error} />}</>
           <p className="text-sm font-light text-gray-500 dark:text-gray-400">
             Already have an account?{" "}
             <a
@@ -145,6 +142,32 @@ export function SignUpForm() {
           </p>
         </form>
       </div>
+    </div>
+  );
+}
+
+export function SignupButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      aria-disabled={pending}
+      className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+      type="submit"
+    >
+      {pending ? "Submitting..." : "Sign up"}
+    </button>
+  );
+}
+
+export function ErrorBadge({ message }) {
+  return (
+    <div
+      className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+      role="alert"
+    >
+      <p className="font-bold">Error</p>
+      <p>{message}</p>
     </div>
   );
 }

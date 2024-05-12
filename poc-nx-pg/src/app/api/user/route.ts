@@ -6,7 +6,7 @@ import {
   validateContentDto,
   validateUserCreateDto,
 } from "../../../dto/validators";
-import { UserService } from "@/services/user.service";
+import { UserService } from "@/services/be/user.service";
 import { UserCreateDto } from "src/dto/user.create.dto";
 
 const prisma = AppServerContext.getPrisma();
@@ -18,7 +18,7 @@ export async function POST(req: Request, res: Response) {
     console.log("validated");
     try {
       const createdUser = await userService.createUser(data);
-      return Response.json(createdUser);
+      return NextResponse.json(createdUser, { status: 201 });
     } catch (e) {
       console.log(`Error while creating a UserCreateDto item`);
       console.log(e);

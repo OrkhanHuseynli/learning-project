@@ -82,6 +82,7 @@
     "@udecode/plate-toggle": "^31.4.0",
     "@udecode/plate-trailing-block": "^31.0.0",
     "@udecode/plate-ui": "^24.1.1",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",

@@ -17,6 +17,7 @@ model user {
   name      String?
   roles     Role[]
   posts post[]
+  password String @default("83unsu837w92owos-w-2?sksoppwsjd")
 }
 
 
