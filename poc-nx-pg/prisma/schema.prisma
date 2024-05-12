@@ -10,8 +10,12 @@ generator client {
 model user {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @map("created_at") @default(now())
+  createdBy String @map("created_by") 
+  updatedAt DateTime @map("updated_at") @default(now())
+  updatedBy String @map("updated_by")
   email     String   @unique
   name      String?
+  roles     Role[]
   posts post[]
 }
 
@@ -23,4 +27,12 @@ model post {
   title String
   content String  @db.Text()
   published Boolean
+}
+
+enum Role {
+  user
+  admin
+  site_owner
+  site_editor
+  viewer
 }
