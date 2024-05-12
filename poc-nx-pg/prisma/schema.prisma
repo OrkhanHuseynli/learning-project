@@ -14,7 +14,8 @@ model user {
   updatedAt DateTime @map("updated_at") @default(now())
   updatedBy String @map("updated_by")
   email     String   @unique
-  name      String?
+  name      String
+  lastName  String
   roles     Role[]
   posts post[]
   password String @default("83unsu837w92owos-w-2?sksoppwsjd")

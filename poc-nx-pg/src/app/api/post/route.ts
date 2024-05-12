@@ -5,8 +5,10 @@ import {
   validateContentCreateDto,
   validateContentDto,
 } from "../../../dto/validators";
+import { UserService } from "@/services/be";
 
 const prisma = AppServerContext.getPrisma();
+const userService = new UserService();
 
 export async function GET(req: NextRequest) {
   const skip = Number(req.nextUrl.searchParams.get("skip"));
@@ -48,6 +50,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request, res: Response) {
   const data = await req.json();
+
   if (validateContentCreateDto(data)) {
     console.log("validated");
     try {
@@ -56,7 +59,7 @@ export async function POST(req: Request, res: Response) {
           title: data.title,
           author: {
             connect: {
-              id: data.author_id,
+              id: userService.getCurrentUser().id,
             },
           },
           content: data.content,

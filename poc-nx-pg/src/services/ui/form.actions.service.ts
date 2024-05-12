@@ -1,6 +1,6 @@
 import { SignupFormSchema, FormState } from "@/app/lib/ui/definitions";
 import { UserService } from "./../ui";
-import { RoleEnum, roles } from "src/auth/roles";
+import { RoleEnum} from "src/auth/roles";
 import { ValidatorService } from "./validator.service";
 const userService = new UserService();
 const validatorService = new ValidatorService();

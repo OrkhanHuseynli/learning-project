@@ -17,7 +17,7 @@ export class UserService {
   }
 
   async createUser(userDto: UserCreateDto): Promise<any> {
-    const currentUser: CurrentUserDto = new UserService().getCurrentUser();
+    const currentUser: CurrentUserDto = this.getCurrentUser();
 
     const user = {
       name: userDto.name,
