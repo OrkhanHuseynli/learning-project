@@ -9,7 +9,6 @@ import {
 import { UserService } from "@/services/be/user.service";
 import { UserCreateDto } from "src/dto/user.create.dto";
 
-const prisma = AppServerContext.getPrisma();
 const userService = new UserService();
 
 export async function POST(req: Request, res: Response) {

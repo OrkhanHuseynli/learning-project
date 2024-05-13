@@ -14,3 +14,13 @@ export class UserCreateDto {
     this.password = null;
   }
 }
+
+export class UserLoginDto {
+  email: string;
+  password: string;
+
+  constructor() {
+    this.email = null;
+    this.password = null;
+  }
+}
