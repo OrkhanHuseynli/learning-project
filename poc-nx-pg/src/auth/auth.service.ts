@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 const saltRounds = 5;
 
-const loginEndpoint = "/api/auth/login";
 // Hash a password
 export class AuthService {
   static hashPassword(password: string): string {

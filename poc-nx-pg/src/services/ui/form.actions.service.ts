@@ -1,4 +1,8 @@
-import { SignupFormSchema, FormState } from "src/lib/ui/definitions";
+import {
+  SignupFormSchema,
+  FormState,
+  LoginFormSchema,
+} from "src/lib/ui/definitions";
 import { UserService } from "./../ui";
 import { RoleEnum } from "src/auth/roles";
 import { ValidatorService } from "./validator.service";
@@ -49,13 +53,13 @@ export async function signUpAction(state: FormState, formData): Promise<any> {
 }
 
 export async function loginAction(state: FormState, formData): Promise<any> {
-  console.log("login up action");
+  const actionName = "Log In Action";
   // Validate form fields
   const userLoginDto = {
     email: formData.get("email"),
     password: formData.get("password"),
   };
-  const validatedFields = SignupFormSchema.safeParse(userLoginDto);
+  const validatedFields = LoginFormSchema.safeParse(userLoginDto);
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
@@ -72,14 +76,14 @@ export async function loginAction(state: FormState, formData): Promise<any> {
     }
     const result = await LoginService.login(userLoginDto);
     if (result) {
-      console.log(`signUpAction : success`);
+      console.log(`${actionName} : success`);
       return {
-        message: "You have successfully signed up!",
+        message: "You have successfully logged in!",
       };
     } else {
-      console.log("sign up was not successful");
+      console.log("Log In was not successful");
       return {
-        error: "Failed to sign up...",
+        error: "Failed to log in...",
       };
     }
   }

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 // import { decrypt } from "@/app/lib/session";
 import { cookies } from "next/headers";
+import { SessionService } from "./auth/be/session.service";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ["/admin", "/user", "/page", "/post", "/posts"];
-const publicRoutes = ["/login", "/signup", "/"];
+const publicRoutes = ["/login", "/signup"];
 const redirectMap = new Map<string, string>([["/home", "/"]]);
 
 export default async function middleware(req: NextRequest) {
@@ -14,8 +15,20 @@ export default async function middleware(req: NextRequest) {
   // const isPublicRoute = publicRoutes.includes(path)
 
   // // 3. Decrypt the session from the cookie
-  // const cookie = cookies().get('session')?.value
-  // const session = await decrypt(cookie)
+  const cookie = cookies().get("session")?.value;
+  if (
+    (cookie === null || cookie === undefined) &&
+    !publicRoutes.includes(path)
+  ) {
+    return NextResponse.redirect(new URL("/login", req.nextUrl));
+  }
+  console.log(cookie);
+  const session = await SessionService.decrypt(cookie);
+  console.log("you session is here");
+  console.log(session);
+  if (session) {
+    console.log(session.email);
+  }
 
   // // 5. Redirect to /login if the user is not authenticated
   // if (isProtectedRoute && !session?.userId) {

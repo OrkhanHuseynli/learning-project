@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { prisma } from "../prisma/prisma.client";
+import { SessionService } from "./auth/be/session.service";
 
 export interface Context {
   prisma: PrismaClient;
