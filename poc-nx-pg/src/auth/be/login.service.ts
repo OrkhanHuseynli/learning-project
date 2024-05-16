@@ -14,7 +14,6 @@ export class LoginService {
       email: userDto.email,
     };
     const u = await this.prisma.user.findUnique({ where: user });
-    console.log(u);
     const { id, email , roles} = u;
     await SessionService.createSession(
       id,

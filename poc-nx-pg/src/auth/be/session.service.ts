@@ -80,4 +80,12 @@ export class SessionService {
 
     return session;
   }
+
+  static deleteSession() {
+    cookies().delete('session')
+  }
+
+  async logout() {
+    SessionService.deleteSession()
+  }
 }

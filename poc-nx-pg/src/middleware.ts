@@ -27,7 +27,7 @@ export default async function middleware(req: NextRequest) {
   console.log("you session is here");
   console.log(session);
   if (session) {
-    console.log(session.email);
+    console.log(session);
   }
 
   // // 5. Redirect to /login if the user is not authenticated

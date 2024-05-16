@@ -7,6 +7,7 @@ import { UserService } from "./../ui";
 import { RoleEnum } from "src/auth/roles";
 import { ValidatorService } from "./validator.service";
 import { LoginService } from "./login.service";
+import { redirect } from "next/navigation";
 const userService = new UserService();
 const validatorService = new ValidatorService();
 
@@ -77,6 +78,7 @@ export async function loginAction(state: FormState, formData): Promise<any> {
     const result = await LoginService.login(userLoginDto);
     if (result) {
       console.log(`${actionName} : success`);
+      redirect("/");
       return {
         message: "You have successfully logged in!",
       };
