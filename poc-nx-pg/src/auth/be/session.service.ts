@@ -2,9 +2,11 @@ import "server-only";
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
 import { setMinutes } from "date-fns";
+import { StringEncoder } from "lib/encoder";
+// import { TextEncoder, TextDecoder } from "util";
 
 const secretKey = process.env.SESSION_SECRET;
-const encodedKey = new TextEncoder().encode(secretKey);
+const encodedKey = StringEncoder.encode(secretKey);
 
 export class SessionPayload implements JWTPayload {
   [propName: string]: unknown;
@@ -82,10 +84,10 @@ export class SessionService {
   }
 
   static deleteSession() {
-    cookies().delete('session')
+    cookies().delete("session");
   }
 
   async logout() {
-    SessionService.deleteSession()
+    SessionService.deleteSession();
   }
 }
