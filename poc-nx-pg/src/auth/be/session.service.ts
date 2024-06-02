@@ -3,7 +3,6 @@ import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
 import { setMinutes } from "date-fns";
 import { StringEncoder } from "lib/encoder";
-// import { TextEncoder, TextDecoder } from "util";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = StringEncoder.encode(secretKey);

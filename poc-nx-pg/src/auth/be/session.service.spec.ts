@@ -14,7 +14,5 @@ describe(`Test ${SessionService.name}`, () => {
     const decodedJwt = await SessionService.decrypt(jwt);
     expect(sessionPayload.userId).toEqual(decodedJwt.userId);
     expect(sessionPayload.userId).not.toEqual("eeee");
-
-    // console.log(decodedJwt);
   });
 });

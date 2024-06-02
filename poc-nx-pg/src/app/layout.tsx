@@ -17,11 +17,19 @@ export const metadata: Metadata = {
   description: "Generated cool team ninjas",
 };
 
+import { cookies } from "next/headers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const session = cookieStore.get("session");
+  if (session === undefined) {
+    console.log("Out of session");
+  }
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -31,7 +39,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NavBar></NavBar>
+          <NavBar session={session}></NavBar>
           {children}
         </ThemeProvider>
       </body>

@@ -41,3 +41,9 @@ export async function POST(req: Request, res: Response) {
     500
   );
 }
+
+export async function DELETE(req: Request, res: Response) {
+  console.log("--------- LOG OUT ---------");
+  loginService.logout();
+  return NextResponse.json({ status: 200 });
+}

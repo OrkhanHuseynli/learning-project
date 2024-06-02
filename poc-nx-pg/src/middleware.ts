@@ -11,11 +11,11 @@ const redirectMap = new Map<string, string>([["/home", "/"]]);
 export default async function middleware(req: NextRequest) {
   // 2. Check if the current route is protected or public
   const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path)
+  const isProtectedRoute = protectedRoutes.includes(path);
   // const isPublicRoute = publicRoutes.includes(path)
-
   // // 3. Decrypt the session from the cookie
   const cookie = cookies().get("session")?.value;
+
   if (
     (cookie === null || cookie === undefined) &&
     !publicRoutes.includes(path)
@@ -33,7 +33,7 @@ export default async function middleware(req: NextRequest) {
 
   // 5. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+    return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
   // // 6. Redirect to /dashboard if the user is authenticated
