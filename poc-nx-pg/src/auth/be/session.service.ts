@@ -1,7 +1,6 @@
 import "server-only";
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
-import { setMinutes } from "date-fns";
 import { StringEncoder } from "lib/encoder";
 
 const secretKey = process.env.SESSION_SECRET;
@@ -18,10 +17,12 @@ export class SessionPayload implements JWTPayload {
   iat?: number;
   email: string;
   userId: string;
+  expiresAt: Date;
 }
 
 export class SessionService {
   static algorithm: string = "HS256";
+  static expirationLength: number = 10;
 
   static createExpDate(minutes: number): Date {
     let t = new Date();
@@ -86,7 +87,12 @@ export class SessionService {
     cookies().delete("session");
   }
 
-  async logout() {
-    SessionService.deleteSession();
+  static async extendSession(session: SessionPayload): Promise<string> {
+    const newSession = await SessionService.encrypt({
+      ...session,
+      expiresAt: SessionService.createExpDate(SessionService.expirationLength),
+    });
+
+    return newSession;
   }
 }

@@ -22,18 +22,25 @@ export default async function middleware(req: NextRequest) {
   ) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
-  console.log(cookie);
   const session = await SessionService.decrypt(cookie);
-
-  console.log("you session is here");
-  console.log(session);
-  if (session) {
-    console.log(session);
-  }
-
   // 5. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !session?.userId) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
+  }
+
+  const response = NextResponse.next();
+  if (session) {
+    const exp = new Date(session.expiresAt).getTime();
+    const now = Date.now();
+    // console.log(`Exp: ${exp}`);
+    // console.log(`Time now : ${now}`);
+    const diff = exp - now;
+    // console.log(`Diff: ${diff}`);
+    if (diff <= 50000) {
+      const newSession = await SessionService.extendSession(session);
+      response.cookies.set("session", newSession);
+      return response;
+    }
   }
 
   // // 6. Redirect to /dashboard if the user is authenticated
@@ -49,7 +56,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(redirectMap.get(path), req.nextUrl));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 // Routes Middleware should not run on

@@ -2,8 +2,6 @@ import { UserLoginDto } from "src/dto/user.create.dto";
 import { PrismaClient, Role } from "@prisma/client";
 import { AuthService } from "src/auth/auth.service";
 import { SessionService } from "./session.service";
-import { cookies } from "next/headers";
-import { ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies";
 
 export class LoginService {
   private prisma = undefined;
@@ -20,12 +18,12 @@ export class LoginService {
     await SessionService.createSession(
       id,
       email,
-      SessionService.createExpDate(1)
+      SessionService.createExpDate(SessionService.expirationLength)
     );
     return AuthService.validatePassword(userDto.password, u.password);
   }
 
   logout() {
-    cookies().delete("session");
+    SessionService.deleteSession();
   }
 }
