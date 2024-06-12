@@ -11,8 +11,9 @@ const protectedRoutes = [
   "/post",
   "/posts",
   "/api-doc",
+  "/api",
 ];
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = ["/login", "/signup", "/api/auth/login"];
 const redirectMap = new Map<string, string>([["/home", "/"]]);
 
 export default async function middleware(req: NextRequest) {
@@ -69,7 +70,7 @@ export default async function middleware(req: NextRequest) {
 // Routes Middleware should not run on
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|.*\\.png$).*)",
+    "/((?!_next/static|_next/image|.*\\.png$).*)",
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
@@ -78,7 +79,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
@@ -86,7 +87,7 @@ export const config = {
     },
 
     {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
       has: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
@@ -94,7 +95,7 @@ export const config = {
     },
 
     {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
       has: [{ type: "header", key: "x-present" }],
       missing: [{ type: "header", key: "x-missing", value: "prefetch" }],
     },
