@@ -48,6 +48,29 @@ export async function GET(req: NextRequest) {
   );
 }
 
+/**
+ * @swagger
+ * /api/post:
+ *   post:
+ *     description: creates post
+ *     tags: [Post]
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       description: Optional description in *Markdown*
+ *       required: true
+ *       content:
+ *        application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/PostCreateDto'
+ *     responses:
+ *       201:
+ *         description: Created Post item
+ *         content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/PostCreateDto'
+ */
 export async function POST(req: Request, res: Response) {
   const data = await req.json();
 
@@ -67,7 +90,7 @@ export async function POST(req: Request, res: Response) {
         },
       });
 
-      return Response.json(createdPost);
+      return NextResponse.json(createdPost, { status: 201 });
     } catch (e) {
       console.log(`Error while creating a post item`);
       console.log(e);

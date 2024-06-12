@@ -4,7 +4,14 @@ import { cookies } from "next/headers";
 import { SessionService } from "./auth/be/session.service";
 
 // 1. Specify protected and public routes
-const protectedRoutes = ["/admin", "/user", "/page", "/post", "/posts"];
+const protectedRoutes = [
+  "/admin",
+  "/user",
+  "/page",
+  "/post",
+  "/posts",
+  "/api-doc",
+];
 const publicRoutes = ["/login", "/signup"];
 const redirectMap = new Map<string, string>([["/home", "/"]]);
 
