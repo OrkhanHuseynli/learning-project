@@ -112,3 +112,17 @@ start-all: ## Start all containers
 .PHONY: stop-all
 stop-all: ## Stop all containers
 	- docker-compose rm -v -s -f
+
+
+DEFAULT=fuga
+test-arg:
+	@echo $(DEFAULT)
+
+
+.PHONY: prisma-toto
+prisma-toto:
+ifdef toto
+	@echo ${toto}
+else
+	@echo 'no toto around'
+endif

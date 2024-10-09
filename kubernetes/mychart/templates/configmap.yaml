@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  {{- template "mychart.labels" . }}
+{{ include "mychart.app" . | indent 4 }}
+data:
+  myvalue: "Hello World"
+  drink: {{ .Values.favorite.drink | quote }}
+  food: {{ .Values.food | default "apple" | upper | quote }}
+  {{- if eq .Values.favorite.drink "coffee" }}
+  mug: "true"
+  {{- end }}
+  {{- $relname := .Release.Name -}}
+  {{- with .Values.favorite }}
+  drink: {{ .drink | default "tea" | quote }}
+  food: {{ .food | upper | quote }}
+  release: {{ $relname }}
+  {{- end }}
+{{ include "mychart.app" . | indent 2 }}
+
+
+
+
+  toppings: |-
+    {{- range .Values.pizzaToppings }}
+    - {{ . | title | quote }}
+    {{- end }}    
+
+  toppings: |-
+    {{- range $index, $topping := .Values.pizzaToppings }}
+      {{ $index }}: {{ $topping }}
+    {{- end }} 
+  
+  {{- range $key, $val := .Values.favorite }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+
+  {{- $files := .Files }}
+  {{- range tuple "optional_config1.toml" "optional_config2.toml" }}
+  {{ . }}: |-
+        {{ $files.Get . }}
+  {{- end }}
+
+  {{ $currentScope := .}}
+  {{ range $path, $_ :=  .Files.Glob  "**.toml" }}
+      {{- with $currentScope}}
+        {{ .Files.Get $path }}
+      {{- end }}
+  {{ end }}
+
+
+  {{- $files := .Files }}
+  {{- range $key, $val := tuple "optional_config1.toml" "optional_config2.toml" }}
+  {{ $val }}: |-
+        {{$key}} : {{ $files.Get $val }}
+  {{- end }}ls

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { RichText } from "../../../components/ui/rich-text/RichText";
 import { Button } from "../../../components/ui/plate-ui/button";
 import { Value } from "@udecode/plate-common";

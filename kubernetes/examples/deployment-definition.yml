@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  myapp-deployment
+  labels:
+    app:  myapp
+    type: backend
+spec:
+  template: 
+    metadata:
+      name: backend-pod
+      labels:
+        app: myapp
+        type: backend
+        env: production
+    spec: 
+      containers:
+        - image:  nginx:1.27.1
+          name: nginx-container-1
+          env:
+            - name:  ENVVARNAME
+              value:  ENVVARVALUE
+  replicas: 3
+  selector:
+    matchLabels:
+      type: backend
+
+ 

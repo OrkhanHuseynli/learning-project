@@ -13,7 +13,13 @@ const protectedRoutes = [
   "/api-doc",
   "/api",
 ];
-const publicRoutes = ["/login", "/signup", "/api/auth/login"];
+const publicRoutes = [
+  "/login",
+  "/signup",
+  "/api/auth/login",
+  "/api/user",
+  "/api/users/available",
+];
 const redirectMap = new Map<string, string>([["/home", "/"]]);
 
 export default async function middleware(req: NextRequest) {
@@ -79,7 +85,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|api/user|_next/static|_next/image|favicon.ico).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
@@ -87,7 +93,7 @@ export const config = {
     },
 
     {
-      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|api/user|_next/static|_next/image|favicon.ico).*)",
       has: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
@@ -95,7 +101,7 @@ export const config = {
     },
 
     {
-      source: "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+      source: "/((?!api/auth|api/user|_next/static|_next/image|favicon.ico).*)",
       has: [{ type: "header", key: "x-present" }],
       missing: [{ type: "header", key: "x-missing", value: "prefetch" }],
     },

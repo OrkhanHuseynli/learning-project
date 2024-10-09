@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels: 
+    app: myapp
+    type: backend
+spec:
+  template: 
+    metadata:
+      name: backend-pod
+      labels:
+        app: myapp
+        type: backend
+        env: production
+    spec: 
+      containers:
+        - image:  nginx
+          name: nginx-container
+          env:
+            - name:  ENVVARNAME
+              value:  ENVVARVALUE
+  replicas: 3
+  selector:
+    matchLabels:
+      type: backend

@@ -1,4 +1,3 @@
-import { describe } from "node:test";
 import { AuthService } from "./auth.service";
 
 describe(`Test ${AuthService.name}`, () => {

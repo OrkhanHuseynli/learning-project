@@ -50,6 +50,7 @@ The generate command generates assets like Prisma Client based on the generator 
 ### Migration
 
 Generate first migration
+`export DB_URL="postgresql://postgres:postgres@localhost:5432/content_db?connection_limit=10&pool_timeout=10"`
 
 `npx prisma migrate dev --name init`
 
@@ -59,7 +60,5 @@ Generate first migration
 ### Seed Data:
 
 Read more : [seeding data in Prisma](https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding)
-
-`export DB_URL="postgresql://postgres:postgres@localhost:5432/content_db?connection_limit=10&pool_timeout=10"`
 
 `npx prisma db seed`

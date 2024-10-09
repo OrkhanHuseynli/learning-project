@@ -1,0 +1,1 @@
+const gValue = "I am a global value"

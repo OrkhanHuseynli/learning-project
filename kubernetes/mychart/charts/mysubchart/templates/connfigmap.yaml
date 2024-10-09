@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-cfgmap2
+  {{- template "mychart.labels" . }}
+  {{ include "mychart.app" . | indent 2 }}
+data:
+  dessert: {{ .Values.dessert }}
+  salat: {{.Values.global.salad }}
