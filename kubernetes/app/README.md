@@ -47,3 +47,28 @@ as we have a postgres service among out helm charts
 #### Reference docs: 
 
 [Minikube + Helm](https://siweheee.medium.com/deploy-your-programs-onto-minikube-with-docker-and-helm-a68097e8d545)
+
+
+#### Useful commands with Postgres CLI
+
+1. Drop dbs
+
+`drop database mydatabase;`
+
+2. list all databases
+
+`\l`  
+
+`\?` -  list all the commands
+
+`\l` -  list databases
+
+`\conninfo` - display information about current connection
+
+`\c [DBNAME]` - connect to new database, e.g., \c template1
+
+`\dt` -  list tables of the public schema
+
+`\dt <schema-name>.*`  list tables of certain schema, e.g., \dt public.*
+
+`\dt *.* ` - list tables of all schemas
