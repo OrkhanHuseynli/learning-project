@@ -36,6 +36,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres-credentials
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres-credentials
+            - name: "DATABASE_URL"
+              value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/notesdb?schema=notes_schema
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -50,6 +63,36 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      # initContainers:
+      #   - name: wait-for-db
+      #     image: postgres:9.6
+      #     env: 
+      #       - name: PGHOST
+      #         value: postgres
+      #       - name: PGUSER
+      #         valueFrom:
+      #           secretKeyRef:
+      #             key: POSTGRES_USER
+      #             name: postgres-credentials
+      #       - name: PGPASSWORD
+      #         valueFrom:
+      #           secretKeyRef:
+      #             key: POSTGRES_PASSWORD
+      #             name: postgres-credentials
+      #       - name: PGDATABASE
+      #         valueFrom:
+      #           secretKeyRef:
+      #             key: POSTGRES_DB
+      #             name: postgres-credentials
+      #     command:
+      #       - /bin/sh
+      #       - -c
+      #       - |
+      #         while ! psql -c 'select 1' > /dev/null 2>&1; do
+      #             echo "waiting for database"
+      #             sleep 1
+      #         done
+      #         echo "database is ready!"
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

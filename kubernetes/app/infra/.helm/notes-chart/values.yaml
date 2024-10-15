@@ -119,3 +119,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+database:
+  name: postgres

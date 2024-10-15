@@ -29,12 +29,20 @@ Now you can ‘build’ against the docker inside minikube, which is instantly a
 
 `minikube service notes-chart  --url -n notes-chart` 
 
+### 3. Upgrade charts
+`helm upgrade notes-chart --namespace notes-chart ./infra/.helm/notes-chart`
 
-### 3. Uninstall charts
+### 4. Uninstall charts
 
 `helm uninstall notes-chart --namespace notes-chart`
 
+---
+### Lookup a service from any pod
+`nslookup [SERICE_NAMAE]`
 
+i.e 
+`nslookup postgres` 
+as we have a postgres service among out helm charts
 ---
 #### Reference docs: 
 

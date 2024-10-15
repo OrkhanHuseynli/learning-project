@@ -1,23 +1,40 @@
-FROM node:18-alpine AS base
+# ----------------------------------- BASE ----------------------------------- #
+FROM node:20 AS base
+# ENV DATABASE_URL="postgresql://postgres:password@postgres:5432/notesdb?schema=notes_schema"
 
+# ----------------------------------- DEPS ----------------------------------- #
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json ./
 
 RUN npm update && npm install
 
+# ---------------------------------- BUILDER --------------------------------- #
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npm run build
+
+COPY prisma ./prisma
+COPY src ./src
+COPY \
+    package.json \
+    next.config.mjs \
+    tsconfig.json \
+    tailwind.config.ts \
+    postcss.config.mjs \
+    .eslintrc.json \
+    ./
+
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npx prisma generate
+RUN npx next build
+# ---------------------------------- RUNNER ---------------------------------- #
+
 
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV production
-
 #creates a system group named nodejs 
 RUN addgroup --system --gid 1001 nodejs
 
