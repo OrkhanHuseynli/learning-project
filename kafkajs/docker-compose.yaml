@@ -1,0 +1,135 @@
+version: "3.8"
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.8.0
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:29093"
+      KAFKA_LISTENERS: "PLAINTEXT://kafka:9092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:29092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    healthcheck:
+      test:
+        ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server kafka:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: fileuser
+      POSTGRES_PASSWORD: filepass
+      POSTGRES_DB: filedb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fileuser -d filedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  localstack-s3:
+    image: localstack/localstack:latest
+    container_name: localstack-s3
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: us-east-1
+      AWS_DEFAULT_REGION: us-east-1
+      DATA_DIR: /var/lib/localstack/data
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "awslocal s3 ls || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-service:
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile
+    container_name: api-service
+    ports:
+      - "3006:3006"
+    environment:
+      PORT: 3006
+      DATABASE_HOST: postgres-db
+      DATABASE_PORT: 5432
+      DATABASE_USER: fileuser
+      DATABASE_PASSWORD: filepass
+      DATABASE_NAME: filedb
+      KAFKA_BROKER: kafka:9092
+      S3_ENDPOINT: http://localstack-s3:4566
+      S3_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      localstack-s3:
+        condition: service_healthy
+    restart: unless-stopped
+
+  file-service:
+    build:
+      context: ./file-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001-3002:3001"
+    environment:
+      KAFKA_BROKER: kafka:9092
+      S3_ENDPOINT: http://localstack-s3:4566
+      S3_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    depends_on:
+      kafka:
+        condition: service_healthy
+      localstack-s3:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+
+  file-creation-ui:
+    build:
+      context: ./file-creation-ui
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3006
+    container_name: file-creation-ui
+    ports:
+      - "3004:3004"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3006
+    depends_on:
+      - api-service
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  localstack_data:
